@@ -41,14 +41,12 @@ class Agent():
         self.actor_local = Actor(state_size, action_size, random_seed).to(device)
         self.actor_target = Actor(state_size, action_size, random_seed).to(device)
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(), lr=LR_ACTOR)
-#         self.actor_scheduler = ReduceLROnPlateau(self.actor_optimizer, mode='min', factor=0.1, patience=10, verbose=True)
         
 
         # Critic Network (w/ Target Network)
         self.critic_local = Critic(state_size, action_size, random_seed).to(device)
         self.critic_target = Critic(state_size, action_size, random_seed).to(device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
-#         self.critic_scheduler = ReduceLROnPlateau(self.critic_optimizer, mode='min', factor=0.1, patience=10, verbose=True)
 
         # Noise process
         # self.noise = OUNoise(action_size, random_seed)
@@ -57,15 +55,6 @@ class Agent():
         # Replay memory
         self.memory = ReplayBuffer(action_size, BUFFER_SIZE, BATCH_SIZE, random_seed)
     
-#     def step(self, state, action, reward, next_state, done):
-#         """Save experience in replay memory, and use random sample from buffer to learn."""
-#         # Save experience / reward
-#         self.memory.add(state, action, reward, next_state, done)
-
-#         # Learn, if enough samples are available in memory
-#         if len(self.memory) > BATCH_SIZE:
-#             experiences = self.memory.sample()
-#             self.learn(experiences, GAMMA)
 
     def step(self, state, action, reward, next_state, done, step):
         """Save experience in replay memory, and use random sample from buffer to learn."""
@@ -78,6 +67,7 @@ class Agent():
             for _ in range(7) :
                 experiences = self.memory.sample()
                 self.learn(experiences, GAMMA)
+                
 
     def act(self, state, add_noise=True):
         """Returns actions for given state as per current policy."""

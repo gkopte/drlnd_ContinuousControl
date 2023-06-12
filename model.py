@@ -30,7 +30,6 @@ class Actor(nn.Module):
         
         #batchnorm
         self.bn_input = nn.BatchNorm1d(fc1_units)
-        self.bn_hidden = nn.BatchNorm1d(fc2_units)
 
         #Dropout
         self.dpout = nn.Dropout(p=0.20)
@@ -50,18 +49,12 @@ class Actor(nn.Module):
 
         #First hidden layer: Dense + ReLU
         x = self.fc2(x)
-#         x = self.bn_hidden(x)
         x = F.relu(x)
 
         #Output layer: Dense  + Tanh
         x = self.fc3(x)
         out = torch.tanh(x)
         return out
-        
-#         x = F.relu(self.fc1(state))
-#         x = F.relu(self.fc2(x))
-#         return F.tanh(self.fc3(x))
-
 
 class Critic(nn.Module):
     """Critic (Value) Model."""
@@ -110,8 +103,3 @@ class Critic(nn.Module):
         #Output layer: Dense
         out = self.fc3(x)
         return out
-        
-#         xs = F.relu(self.fcs1(state))
-#         x = torch.cat((xs, action), dim=1)
-#         x = F.relu(self.fc2(x))
-#         return self.fc3(x)
